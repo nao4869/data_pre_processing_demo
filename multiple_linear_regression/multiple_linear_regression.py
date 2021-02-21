@@ -12,8 +12,8 @@ from sklearn.preprocessing import OneHotEncoder
 def main():
     rd_to_state, profit = retrieveMatricsValuesFromData()
     encoded_data = encodeCategoricalData(rd_to_state)
-    x_train, x_test, y_train, y_test = splitDataSet(rd_to_state, profit)
-    print(encoded_data)
+    x_train, x_test, y_train, y_test = splitDataSet(encoded_data, profit)
+    buildMultipleLinearRegressionModel(x_train, x_test, y_train, y_test)
 
 
 def retrieveMatricsValuesFromData() -> numpy.ndarray:
@@ -26,7 +26,7 @@ def retrieveMatricsValuesFromData() -> numpy.ndarray:
 
     return x, y
 
-# Encode the state string to numerical value
+
 def encodeCategoricalData(x: numpy.ndarray):
     # Encoding categorical data
     columnTransformer = ColumnTransformer(
@@ -47,5 +47,14 @@ def splitDataSet(x: numpy.ndarray, y: numpy.ndarray) -> numpy.ndarray:
     )
     return x_train, x_test, y_train, y_test
 
+
+def buildMultipleLinearRegressionModel(x_train, x_test, y_train, y_test):
+    regressor = LinearRegression()
+    regressor.fit(x_train, y_train)
+
+    # predict the test set results
+    y_predicted = regressor.predict(x_test)
+    numpy.set_printoptions(precision=2)
+    print(numpy.concatenate((y_predicted.reshape(len(y_predicted),1), y_test.reshape(len(y_test),1)),1))
 
 main()
