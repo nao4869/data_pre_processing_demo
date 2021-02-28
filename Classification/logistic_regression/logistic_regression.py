@@ -4,12 +4,13 @@ import matplotlib.pyplot as plot
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 
 
 def main():
     x, y = retrieveMatricsValuesFromData()
     x_train, x_test, y_train, y_test = splitDataSet(x, y)
-    buildFeatureScalling(x_train, x_test)
+    buildLogisticRegressionModel(x_train, x_test, y_train, y_test)
 
 
 def retrieveMatricsValuesFromData() -> numpy.ndarray:
@@ -33,11 +34,21 @@ def splitDataSet(x: numpy.ndarray, y: numpy.ndarray) -> numpy.ndarray:
     return x_train, x_test, y_train, y_test
 
 
-def buildFeatureScalling(x_train: numpy.ndarray, x_test: numpy.ndarray):
+def buildLogisticRegressionModel(x_train, x_test, y_train, y_test):
     standardScaler = StandardScaler()
     x_training_set = standardScaler.fit_transform(x_train)
-    x_test_set = standardScaler.transform(x_test)
-    print(x_training_set)
+
+    # Standarize the test data set
+    standarized_x_test_set = standardScaler.transform(x_test)
+
+    # Training the logistic regression model on the training set
+    classifier = LogisticRegression(random_state=0)
+
+    # Calcaulate weight of logistic regression model
+    classifier.fit(x_train, y_train)
+    
+    probaility = classifier.predict_proba(standarized_x_test_set)
+    print(probaility)
 
 
 main()
