@@ -31,11 +31,11 @@ def retrieveMatricsValuesFromData() -> numpy.ndarray:
 def buildLinearRegressionModel(x, y):
     linear_regressor = LinearRegression()
     fitted_model = linear_regressor.fit(x, y)
-    
+
     # visualizing the linear regression results
-    plot.scatter(x, y, color = 'red')
-    plot.plot(x, linear_regressor.predict(x), color = 'blue')
-    
+    plot.scatter(x, y, color='red')
+    plot.plot(x, linear_regressor.predict(x), color='blue')
+
     plot.title('Linear Regression model')
     plot.xlabel('Position Level')
     plot.ylabel('Salary')
@@ -44,16 +44,16 @@ def buildLinearRegressionModel(x, y):
 
 # Training the linear regression model on the whole dataset
 def buildPolynomialRegressionModel(x, y):
-    polynomial_regressor = PolynomialFeatures(degree=10)
+    polynomial_regressor = PolynomialFeatures(degree=2)
     x_polynomial_feature = polynomial_regressor.fit_transform(x)
 
     linear_regressor = LinearRegression()
     linear_regressor.fit(x_polynomial_feature, y)
-    
+
     # visualizing the linear regression results
-    plot.scatter(x, y, color = 'red')
-    plot.plot(x, linear_regressor.predict(x_polynomial_feature), color = 'blue')
-    
+    plot.scatter(x, y, color='red')
+    plot.plot(x, linear_regressor.predict(x_polynomial_feature), color='blue')
+
     plot.title('Polynomial Regression model')
     plot.xlabel('Position Level')
     plot.ylabel('Salary')
