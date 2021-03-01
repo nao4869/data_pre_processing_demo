@@ -6,12 +6,16 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.calibration import calibration_curve
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 
 def main():
     x, y = retrieveMatricsValuesFromData()
     x_train, x_test, y_train, y_test = splitDataSet(x, y)
-    buildLogisticRegressionModel(x_train, x_test, y_train, y_test)
+    training_set_predicted_purchased = buildLogisticRegressionModel(
+        x_train, x_test, y_train, y_test)
+    displayActualAndPredictedResults(y_test, training_set_predicted_purchased)
+    buildConfusionMatrix(y_test, training_set_predicted_purchased)
 
 
 def retrieveMatricsValuesFromData() -> numpy.ndarray:
@@ -52,9 +56,24 @@ def buildLogisticRegressionModel(x_train, x_test, y_train, y_test):
     expected_prediction = classifier.predict(
         standardScaler.transform(x_test))
 
-    # get prediction score
+    # get prediction score for whole test set
     prediction_score = classifier.score(standarized_x_test_set, y_test)
-    print(prediction_score)
+    # print(prediction_score)
+
+    return expected_prediction
+
+
+def displayActualAndPredictedResults(test_set_purchased, training_set_predicted_purchased):
+    # comparing actual results and predicted results
+    actual_and_predicted_results = numpy.concatenate((training_set_predicted_purchased.reshape(
+        len(training_set_predicted_purchased), 1), test_set_purchased.reshape(len(test_set_purchased), 1)), 1)
+    print(actual_and_predicted_results)
+
+
+def buildConfusionMatrix(test_set_purchased, training_set_predicted_purchased):
+    confusion_matrix_output = confusion_matrix(
+        test_set_purchased, training_set_predicted_purchased)
+    print(confusion_matrix_output)
 
 
 main()
