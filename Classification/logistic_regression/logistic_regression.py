@@ -75,5 +75,9 @@ def buildConfusionMatrix(test_set_purchased, training_set_predicted_purchased):
         test_set_purchased, training_set_predicted_purchased)
     print(confusion_matrix_output)
 
+    predicted_score = accuracy_score(
+        test_set_purchased, training_set_predicted_purchased)
+    print(predicted_score)
+
 
 main()
