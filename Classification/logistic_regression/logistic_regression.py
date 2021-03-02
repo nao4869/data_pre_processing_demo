@@ -17,7 +17,9 @@ def main():
         x_train, x_test, y_train, y_test)
     displayActualAndPredictedResults(y_test, training_set_predicted_purchased)
     buildConfusionMatrix(y_test, training_set_predicted_purchased)
-    visualizeTrainingSet(x_train, y_train)
+    
+    # visualizeTrainingSet(x_train, y_train)
+    visualizeTestSetResult(x_test, y_test)
 
 
 def retrieveMatricsValuesFromData() -> numpy.ndarray:
@@ -85,7 +87,7 @@ def buildConfusionMatrix(test_set_purchased, training_set_predicted_purchased):
 def visualizeTrainingSet(x_train, y_train):
     standardScaler = StandardScaler()
     standarized_x_training_set = standardScaler.fit_transform(x_train)
-    
+
     classifier = LogisticRegression(random_state=0)
     classifier.fit(standarized_x_training_set, y_train)
     x_set, y_set = standardScaler.inverse_transform(
@@ -101,6 +103,31 @@ def visualizeTrainingSet(x_train, y_train):
         plot.scatter(x_set[y_set == j, 0], x_set[y_set == j, 1],
                      c=ListedColormap(('red', 'green'))(i), label=j)
     plot.title('Logistic Regression (Training set)')
+    plot.xlabel('Age')
+    plot.ylabel('Estimated Salary')
+    plot.legend()
+    plot.show()
+    
+def visualizeTestSetResult(x_test, y_test):
+    standardScaler = StandardScaler()
+    # Standarize the test data set
+    standarized_x_test_set = standardScaler.fit_transform(x_test)
+
+    classifier = LogisticRegression(random_state=0)
+    classifier.fit(standarized_x_test_set, y_test)
+    x_set, y_set = standardScaler.inverse_transform(
+        standarized_x_test_set), y_test
+
+    X1, X2 = numpy.meshgrid(numpy.arange(start=x_set[:, 0].min() - 10, stop=x_set[:, 0].max() + 10, step=0.25),
+                            numpy.arange(start=x_set[:, 1].min() - 1000, stop=x_set[:, 1].max() + 1000, step=0.25))
+    plot.contourf(X1, X2, classifier.predict(standardScaler.transform(numpy.array([X1.ravel(), X2.ravel()]).T)).reshape(X1.shape),
+                  alpha=0.75, cmap=ListedColormap(('red', 'green')))
+    plot.xlim(X1.min(), X1.max())
+    plot.ylim(X2.min(), X2.max())
+    for i, j in enumerate(numpy.unique(y_set)):
+        plot.scatter(x_set[y_set == j, 0], x_set[y_set == j, 1],
+                     c=ListedColormap(('red', 'green'))(i), label=j)
+    plot.title('Logistic Regression (Test set)')
     plot.xlabel('Age')
     plot.ylabel('Estimated Salary')
     plot.legend()
