@@ -17,11 +17,11 @@ def main():
     x_train, x_test, y_train, y_test = splitDataSet(x, y)
     training_set_predicted_purchased = buildKNearestNeighborsModel(
         x_train, x_test, y_train, y_test)
-    # buildConfusionMatrix(y_test, training_set_predicted_purchased)
-    
+    buildConfusionMatrix(y_test, training_set_predicted_purchased)
+
     # displayActualAndPredictedResults(y_test, training_set_predicted_purchased)
-    
-    # visualizeTrainingSet(x_train, y_train)
+
+    visualizeTrainingSet(x_train, y_train)
     # visualizeTestSetResult(x_test, y_test)
 
 
@@ -92,8 +92,8 @@ def visualizeTrainingSet(x_train, y_train):
     standarized_x_training_set = standardScaler.fit_transform(x_train)
 
     # Create KNN instance
-    classifier = KNeighborsClassifier(n_neighbors=30)
-    
+    classifier = KNeighborsClassifier(n_neighbors=5)
+
     classifier.fit(standarized_x_training_set, y_train)
     x_set, y_set = standardScaler.inverse_transform(
         standarized_x_training_set), y_train
@@ -112,7 +112,8 @@ def visualizeTrainingSet(x_train, y_train):
     plot.ylabel('Estimated Salary')
     plot.legend()
     plot.show()
-    
+
+
 def visualizeTestSetResult(x_test, y_test):
     standardScaler = StandardScaler()
     # Standarize the test data set
@@ -120,7 +121,7 @@ def visualizeTestSetResult(x_test, y_test):
 
     # Create KNN instance
     classifier = KNeighborsClassifier(n_neighbors=30)
-    
+
     classifier.fit(standarized_x_test_set, y_test)
     x_set, y_set = standardScaler.inverse_transform(
         standarized_x_test_set), y_test
